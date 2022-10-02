@@ -2,9 +2,6 @@ name: "tagged-release"
 
 on:
   push:
-#     branches: [ "master" ]
-#   pull_request:
-#     branches: [ "master" ]
     tags: 
       - "v*"
 
@@ -30,7 +27,6 @@ jobs:
             goos: windows
     
     steps:
-      # ...
       - uses: actions/checkout@v3
 
       - name: Set up Go
@@ -49,16 +45,19 @@ jobs:
         
       - name: Packaging...
         run: |
-          find *|grep git_action_golang_test |grep -v ".tar"|xargs tar cvf git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar 
-          find * |grep git_action_golang_test|grep -v '.tar'|xargs rm 
+          find *|grep git_action_golang_test|xargs zip git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip 
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           # Artifact name
-          name: ${{ env.RELEASE_VERSION }}/git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar # optional, default is artifact
+          # name is only a identifier that means when you download use name the file name you download is actually the `path`
+          # so we use a simple file name
+          # TODO:this is not a elegent implement due to that we can't use wildcard when download: see https://github.com/actions/download-artifact/issues/6
+          name: ${{ matrix.goos }}-${{ matrix.goarch }}.zip
+#           name: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
-          path: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar
+          path: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip
         
         
   release: 
@@ -73,22 +72,21 @@ jobs:
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-#           name: git_action_golang_test-*-${{ env.RELEASE_VERSION }}.tar # optional
+          name: |
+            linux-amd64.zip
+            darwin-amd64.zip
+            windows-amd64.zip
+            linux-arm64.zip
+            darwin-arm64.zip
+            windows-arm64.zip
           # Destination path
-          path: ${{ env.RELEASE_VERSION }}/ # optional
+#           path: ${{ env.RELEASE_VERSION }}/ # optional
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            git_action_golang_test-*-${{ env.RELEASE_VERSION }}.tar
+            git_action_golang_test-*-${{ env.RELEASE_VERSION }}.zip
         
-#       - name: "release"
-#         uses: "marvinpinto/action-automatic-releases@latest"
-#         with:
-#           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#           automatic_release_tag: "${{ env.RELEASE_VERSION }}"
-#           prerelease: false
-#           files: |
-#             *.tar
+
 
