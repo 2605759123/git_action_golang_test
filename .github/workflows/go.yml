@@ -49,7 +49,7 @@ jobs:
         
       - name: Packaging...
         run: |
-          find *|grep git_action_golang_test |grep -v ".tar"|tar cvf git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar 
+          find *|grep git_action_golang_test |grep -v ".tar"|xargs tar cvf git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar 
           find * |grep git_action_golang_test|grep -v '.tar'|xargs rm 
       
         
