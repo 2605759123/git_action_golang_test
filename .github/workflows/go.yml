@@ -52,17 +52,26 @@ jobs:
           find *|grep git_action_golang_test |grep -v ".tar"|xargs tar cvf git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar 
           find * |grep git_action_golang_test|grep -v '.tar'|xargs rm 
       
-        
-        
-  release: 
-    name: "release"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: "release"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ env.RELEASE_VERSION }}"
           prerelease: false
           files: |
             git_action_golang_test-*.tar
+      
+        
+        
+#   release: 
+#     name: "release"
+#     needs: build
+#     steps:
+#       - uses: "marvinpinto/action-automatic-releases@latest"
+#         with:
+#           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#           automatic_release_tag: "${{ env.RELEASE_VERSION }}"
+#           prerelease: false
+#           files: |
+#             git_action_golang_test-*.tar
 
