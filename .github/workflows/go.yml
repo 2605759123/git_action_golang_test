@@ -9,10 +9,26 @@ on:
       - "v*"
 
 jobs:
-  tagged-release:
-    name: "Tagged Release"
+  build:
+    name: "build"
     runs-on: "ubuntu-latest"
 
+    strategy:
+      matrix:
+        include:
+          - goarch: amd64
+            goos: linux
+          - goarch: amd64
+            goos: darwin
+          - goarch: amd64
+            goos: windows
+          - goarch: arm64
+            goos: linux
+          - goarch: arm64
+            goos: darwin
+          - goarch: arm64
+            goos: windows
+    
     steps:
       # ...
       - uses: actions/checkout@v3
@@ -23,17 +39,30 @@ jobs:
           go-version: 1.18
 
       - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
         run: go build -v ./...
-        
+      
       - name: GetVersion
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
+        
+      - name: Packaging...
+        run: |
+          find *|grep git_action_golang_test |grep -v ".tar"|tar cvf git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.tar 
+          find * |grep git_action_golang_test|grep -v '.tar'|xargs rm 
+      
+        
+        
+  release: 
+    name: "release"
+    runs-on: "ubuntu-latest"
+    steps:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ env.RELEASE_VERSION }}"
           prerelease: false
           files: |
-            LICENSE.txt
-            git_action_golang_test
+            git_action_golang_test-*.tar
 
