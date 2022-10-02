@@ -4,6 +4,6 @@ import "fmt"
 
 func main() {
 	fmt.Println("1111")
-	version := "v0.0"
+	version := "v0.1"
 	fmt.Println("当前版本为：", version)
 }
