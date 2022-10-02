@@ -94,5 +94,5 @@ jobs:
           automatic_release_tag: "${{ env.RELEASE_VERSION }}"
           prerelease: false
           files: |
-            git_action_golang_test-*.tar
+            *.tar
 
