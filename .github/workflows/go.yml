@@ -83,9 +83,9 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
         uses: aochmann/actions-download-artifact@1.0.4
-        with:
+#         with:
           # Artifact name (download all artifacts in not specified)
-          name: git_action_golang_test-*-${{ env.RELEASE_VERSION }}.tar # optional
+#           name: git_action_golang_test-*-${{ env.RELEASE_VERSION }}.tar # optional
         
       - name: "release"
         uses: "marvinpinto/action-automatic-releases@latest"
