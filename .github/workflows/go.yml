@@ -72,15 +72,38 @@ jobs:
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: |
-            linux-amd64.zip
-            darwin-amd64.zip
-            windows-amd64.zip
-            linux-arm64.zip
-            darwin-arm64.zip
-            windows-arm64.zip
-          # Destination path
-#           path: ${{ env.RELEASE_VERSION }}/ # optional
+          name: linux-amd64.zip
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: darwin-amd64.zip
+      
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: windows-amd64.zip
+        
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: linux-arm64.zip
+          
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: darwin-arm64.zip
+          
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          # Artifact name
+          name: windows-arm64.zip
+
 
       - name: Release
         uses: softprops/action-gh-release@v1
