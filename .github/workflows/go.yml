@@ -108,7 +108,7 @@ jobs:
           name: windows-arm64.zip
         
       - name: Print
-        run: echo ${{ github.branches }}
+        run: echo ${{ env.RELEASE_VERSION }}
           
       
       - name: Release
