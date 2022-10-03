@@ -106,6 +106,10 @@ jobs:
         with:
           # Artifact name
           name: windows-arm64.zip
+          
+      - name: print
+        run: |
+          echo github.ref
         
       
       - name: Release
@@ -117,10 +121,7 @@ jobs:
           files: |
             git_action_golang_test-*-${{ env.RELEASE_VERSION }}.zip
             
-      - name: print
-        run: |
-          echo startsWith(${{ env.RELEASE_VERSION }}, 'release-')
-          echo github.ref
+      
         
 
 
