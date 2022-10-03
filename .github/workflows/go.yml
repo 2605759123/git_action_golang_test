@@ -2,9 +2,9 @@ name: "tagged-release"
 
 on:
   push:
-    branches:
+#    branches:
 #       - "master"
-      - "release-*"
+#      - "release-*"
     tags: 
       - "v*"
 
@@ -57,8 +57,9 @@ jobs:
           # name is only a identifier that means when you download use name the file name you download is actually the `path`
           # so we use a simple file name
           # TODO:this is not a elegent implement due to that we can't use wildcard when download: see https://github.com/actions/download-artifact/issues/6
-          name: ${{ matrix.goos }}-${{ matrix.goarch }}.zip
-#           name: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip # optional, default is artifact
+#          name: ${{ matrix.goos }}-${{ matrix.goarch }}.zip
+          # use original name to prevent file overlapped
+          name: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
           path: git_action_golang_test-${{ matrix.goos }}-${{ matrix.goarch }}-${{ env.RELEASE_VERSION }}.zip
         
@@ -75,37 +76,42 @@ jobs:
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: linux-amd64.zip
+          name: git_action_golang_test-linux-amd64-${{ env.RELEASE_VERSION }}.zip
 
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: darwin-amd64.zip
+          name: git_action_golang_test-darwin-amd64-${{ env.RELEASE_VERSION }}.zip
+#          name: darwin-amd64.zip
       
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: windows-amd64.zip
+          name: git_action_golang_test-windows-amd64-${{ env.RELEASE_VERSION }}.zip
+#          name: windows-amd64.zip
         
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: linux-arm64.zip
+          name: git_action_golang_test-linux-amd64-${{ env.RELEASE_VERSION }}.zip
+#          name: linux-arm64.zip
           
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: darwin-arm64.zip
+          name: git_action_golang_test-darwin-arm64-${{ env.RELEASE_VERSION }}.zip
+#          name: darwin-arm64.zip
           
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           # Artifact name
-          name: windows-arm64.zip
+          name: git_action_golang_test-windows-arm64-${{ env.RELEASE_VERSION }}.zip
+#          name: windows-arm64.zip
           
       - name: Print github.ref
         run: |
@@ -114,7 +120,7 @@ jobs:
       # ${{ github.ref }}:如果是tag，则是refs/tags/v0.1.20
       # 如果是branch，则是refs/heads/master
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !includes(github.ref,'beta')
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
@@ -124,7 +130,8 @@ jobs:
 
 
       - name: Pre-Release
-        if: startsWith(github.ref, 'refs/heads/release-')
+#        if: startsWith(github.ref, 'refs/heads/release-')
+        if: startsWith(github.ref, 'refs/tags/v') && includes(github.ref,'beta')
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
