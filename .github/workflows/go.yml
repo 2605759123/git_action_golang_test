@@ -109,7 +109,7 @@ jobs:
           
       - name: print
         run: |
-          echo github.ref
+          echo ${{ github.ref }}
         
       
       - name: Release
