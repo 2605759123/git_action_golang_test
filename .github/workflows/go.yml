@@ -3,7 +3,7 @@ name: "tagged-release"
 on:
   push:
     branches:
-#       - "master"
+      - "master"
       - "release-*"
     tags: 
       - "v*"
