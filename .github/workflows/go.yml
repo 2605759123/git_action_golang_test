@@ -2,9 +2,9 @@ name: "tagged-release"
 
 on:
   push:
-#     branches:
-#       - "master"
-#       - "release"
+    branches:
+      - "master"
+      - "release"
     tags: 
       - "v*"
 
@@ -106,6 +106,9 @@ jobs:
         with:
           # Artifact name
           name: windows-arm64.zip
+        
+      - name: Print
+        run: echo ${{ github.branches }}
           
       
       - name: Release
