@@ -119,7 +119,8 @@ jobs:
 
 
       - name: Pre-Release
-        if: ${{ env.RELEASE_VERSION == 'release' }}
+#         if: ${{ env.RELEASE_VERSION == 'release' }}
+        if: startsWith(${{ env.RELEASE_VERSION }}, 'release-')
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
