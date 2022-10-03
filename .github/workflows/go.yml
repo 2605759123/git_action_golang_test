@@ -2,9 +2,9 @@ name: "tagged-release"
 
 on:
   push:
-    branches:
-      - "master"
-      - "release"
+#     branches:
+#       - "master"
+#       - "release"
     tags: 
       - "v*"
 
@@ -109,7 +109,7 @@ jobs:
           
       
       - name: Release
-        if: ${{ github.branches == "master" }}
+        if: ${{ github.branches == 'master' }}
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
@@ -119,7 +119,7 @@ jobs:
 
 
       - name: Pre-Release
-        if: ${{ github.branches == "release" }}
+        if: ${{ github.branches == 'release' }}
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
