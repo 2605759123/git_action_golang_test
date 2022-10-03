@@ -2,9 +2,9 @@ name: "tagged-release"
 
 on:
   push:
-    branches:
-      - "master"
-      - "release"
+#     branches:
+#       - "master"
+#       - "release"
     tags: 
       - "v*"
 
@@ -107,12 +107,9 @@ jobs:
           # Artifact name
           name: windows-arm64.zip
         
-      - name: Print
-        run: echo ${{ env.RELEASE_VERSION }}
-          
       
       - name: Release
-        if: ${{ github.branches == 'master' }}
+        if: ${{ env.RELEASE_VERSION == 'master' }}
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
@@ -122,7 +119,7 @@ jobs:
 
 
       - name: Pre-Release
-        if: ${{ github.branches == 'release' }}
+        if: ${{ env.RELEASE_VERSION == 'release' }}
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
