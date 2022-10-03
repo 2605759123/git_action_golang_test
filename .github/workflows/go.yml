@@ -2,6 +2,9 @@ name: "tagged-release"
 
 on:
   push:
+    branches:
+      - "master"
+      - "release"
     tags: 
       - "v*"
 
@@ -103,11 +106,24 @@ jobs:
         with:
           # Artifact name
           name: windows-arm64.zip
-
-
+          
+      
       - name: Release
+        if: ${{ github.branches == "master" }}
         uses: softprops/action-gh-release@v1
         with:
+          generate_release_notes: true
+          prerelease: false
+          files: |
+            git_action_golang_test-*-${{ env.RELEASE_VERSION }}.zip
+
+
+      - name: Pre-Release
+        if: ${{ github.branches == "release" }}
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          prerelease: true
           files: |
             git_action_golang_test-*-${{ env.RELEASE_VERSION }}.zip
         
