@@ -116,6 +116,9 @@ jobs:
           prerelease: false
           files: |
             git_action_golang_test-*-${{ env.RELEASE_VERSION }}.zip
+            
+      - name: print
+        run: echo ${{ env.RELEASE_VERSION }}
 
 
       - name: Pre-Release
